@@ -17,8 +17,8 @@ const settings = {
 	speed: { value: 1.0 },
 	experimentalFeatures: { value: false },
 	hideWebamp: { value: false },
-	kiosk: { value: false },
-	scanLines: { value: false },
+	kiosk: { value: true },
+	scanLines: { value: true },
 };
 
 const init = () => {
@@ -76,10 +76,10 @@ const init = () => {
 		true,
 	);
 	settings.hideWebamp = new Setting('hideWebamp', 'Hide Webamp (Winamp)', 'checkbox', false, hideWebampChange, true);
-	settings.scanLines = new Setting('scanLines', 'Enable Scan Lines', 'checkbox', false, scanLinesChange, true);
+	settings.scanLines = new Setting('scanLines', 'Enable Scan Lines', 'checkbox', true, scanLinesChange, true);
 
 	settings.wide = new Setting('wide', 'Widescreen', 'checkbox', false, wideScreenChange, true);
-	settings.kiosk = new Setting('kiosk', 'Kiosk', 'checkbox', false, kioskChange, false);
+	settings.kiosk = new Setting('kiosk', 'Kiosk', 'checkbox', true, kioskChange, false);
 
 	// generate html objects
 	const settingHtml = Object.values(settings).map((d) => d.generate());
