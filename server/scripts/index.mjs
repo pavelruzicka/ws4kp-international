@@ -92,11 +92,16 @@ const init = () => {
 
 	const loadFromParsed = parsedParameters.latLonQuery && parsedParameters.latLon;
 
-	// Auto load the parsed parameters and fall back to the previous query
-	const query = parsedParameters.latLonQuery ?? localStorage.getItem('latLonQuery');
-	const latLon = parsedParameters.latLon ?? localStorage.getItem('latLon');
+	// Auto load the parsed parameters and fall back to the previous query, then default to Brno
+	const DEFAULT_QUERY = 'Brno, Brno-město, Jihomoravský kraj, CZE';
+	const DEFAULT_LAT_LON = '{"lat":49.2078,"lon":16.6018}';
+	const query = parsedParameters.latLonQuery ?? localStorage.getItem('latLonQuery') ?? DEFAULT_QUERY;
+	const latLon = parsedParameters.latLon ?? localStorage.getItem('latLon') ?? DEFAULT_LAT_LON;
 	const fromGPS = localStorage.getItem('latLonFromGPS') && !loadFromParsed;
 	if (query && latLon && !fromGPS) {
+		// Ensure localStorage is populated so navigation.mjs can find the locality
+		if (!localStorage.getItem('latLonQuery')) localStorage.setItem('latLonQuery', query);
+		if (!localStorage.getItem('latLon')) localStorage.setItem('latLon', typeof latLon === 'string' ? latLon : JSON.stringify(latLon));
 		const txtAddress = document.querySelector(TXT_ADDRESS_SELECTOR);
 		txtAddress.value = query;
 		loadData(JSON.parse(latLon));
