@@ -1,7 +1,7 @@
 import { json } from './modules/utils/fetch.mjs';
 import noSleep from './modules/utils/nosleep.mjs';
 import { round2 } from './modules/utils/units.mjs';
-import { parseQueryString } from './modules/share.mjs';
+import { createLink, parseQueryString } from './modules/share.mjs';
 import {
 	message as navMessage, hideAllCanvases, isPlaying, resize, resetStatuses, latLonReceived, stopAutoRefreshTimer, registerRefreshData,
 } from './modules/navigation.mjs';
@@ -25,7 +25,7 @@ const TXT_ADDRESS_SELECTOR = '#txtAddress';
 const TOGGLE_FULL_SCREEN_SELECTOR = '#ToggleFullScreen';
 const BNT_GET_GPS_SELECTOR = '#btnGetGps';
 
-let isAudioPlaying = false;
+let isAudioPlaying = true;
 
 const init = () => {
 	document.querySelector(TXT_ADDRESS_SELECTOR).addEventListener('focus', (e) => {
@@ -143,6 +143,8 @@ const init = () => {
 	// swipe functionality
 	document.querySelector('#container').addEventListener('swiped-left', () => swipeCallBack('left'));
 	document.querySelector('#container').addEventListener('swiped-right', () => swipeCallBack('right'));
+
+	updateAudioButton();
 };
 
 const autocompleteOnSelect = async (suggestion, elem) => {
@@ -358,6 +360,12 @@ const updateFullScreenNavigate = () => {
 
 const documentKeydown = (e) => {
 	const { key } = e;
+
+	if (e.ctrlKey && e.shiftKey && (key === 'L' || key === 'l')) {
+		e.preventDefault();
+		createLink({ preventDefault: () => {} });
+		return false;
+	}
 
 	if (document.fullscreenElement || document.activeElement === document.body) {
 		switch (key) {

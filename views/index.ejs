@@ -473,7 +473,7 @@
       webamp.toggleRepeat();
       webamp.toggleShuffle();
 
-      webamp.renderWhenReady(document.getElementById("webamp-app"));
+      webamp.renderWhenReady(document.getElementById("webamp-app")).then(() => webamp.play());
   </script>
 </body>
 
